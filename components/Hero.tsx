@@ -29,12 +29,12 @@ const Hero: React.FC = () => {
         <div className="max-w-4xl mx-auto">
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-white leading-[1.15] mb-8 drop-shadow-2xl">
             건물관리 효율화<br />
-            <span className="text-white">K-IoT Plus</span> 가 앞장서겠습니다
+            <span className="text-white">K-IoT Plus</span>가 해결해 드립니다.
           </h1>
           <p className="text-lg md:text-2xl text-white/95 mb-12 leading-relaxed max-w-3xl mx-auto font-medium drop-shadow-lg">
             K-IoT Plus는 IoT 센서를 통해 건물을 감시하고<br className="hidden md:block" />
             데이터 분석을 통한 예측 가능한 사고를 예방하고<br className="hidden md:block" />
-            효율적인 건물 관리에 도움이 됩니다
+            효율적인 건물 관리에 도움을 드립니다.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
             <a

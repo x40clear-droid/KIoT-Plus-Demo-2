@@ -113,7 +113,7 @@ const ServiceFeatures: React.FC = () => {
           </div>
 
           <div 
-            className="relative overflow-visible cursor-grab active:cursor-grabbing select-none"
+            className="relative overflow-hidden cursor-grab active:cursor-grabbing select-none"
             onMouseDown={handleDragStart}
             onMouseUp={handleDragEnd}
             onMouseLeave={handleDragEnd}
