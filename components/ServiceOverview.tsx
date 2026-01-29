@@ -1,7 +1,90 @@
 
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 const ServiceOverview: React.FC = () => {
+  const [activeFuncSlide, setActiveFuncSlide] = useState(0);
+  const [isAutoPlayStopped, setIsAutoPlayStopped] = useState(false);
+  const funcSlideCount = 7;
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  
+  const dragStartX = useRef<number | null>(null);
+  const isDragging = useRef(false);
+
+  useEffect(() => {
+    resetTimeout();
+    if (!isAutoPlayStopped) {
+      timeoutRef.current = setTimeout(
+        () => setActiveFuncSlide((prev) => (prev === funcSlideCount - 1 ? 0 : prev + 1)),
+        7000
+      );
+    }
+    return () => resetTimeout();
+  }, [activeFuncSlide, isAutoPlayStopped]);
+
+  const resetTimeout = () => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+  };
+
+  const handleDragStart = (e: React.MouseEvent | React.TouchEvent) => {
+    resetTimeout();
+    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+    dragStartX.current = clientX;
+    isDragging.current = true;
+  };
+
+  const handleDragEnd = (e: React.MouseEvent | React.TouchEvent) => {
+    if (!isDragging.current || dragStartX.current === null) return;
+    const clientX = 'changedTouches' in e ? e.changedTouches[0].clientX : e.clientX;
+    const diff = dragStartX.current - clientX;
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) {
+        setActiveFuncSlide((prev) => (prev === funcSlideCount - 1 ? prev : prev + 1));
+      } else {
+        setActiveFuncSlide((prev) => (prev === 0 ? prev : prev - 1));
+      }
+    }
+    dragStartX.current = null;
+    isDragging.current = false;
+  };
+
+  const serviceFunctions = [
+    {
+      title: '종합현황',
+      desc: '개별사업소 혹은 다수 사업소에 대한 시각화 된 정보 제공으로 운영현황을 직관적으로 파악하고 통합 운영 제공',
+      imageDesc: '종합 대시보드 UI (차트, 맵, 알림 현황 포함)'
+    },
+    {
+      title: '이력조회',
+      desc: '설정 및 진단룰에 의해 발생한 실시간 알림처리 정보 제공',
+      imageDesc: '이력 목록 및 필터링 UI'
+    },
+    {
+      title: '타임라인 및 히스토리',
+      desc: '알림 처리에 대한 타임라인 기록과 과거 히스토리 조회',
+      imageDesc: '타임라인 및 과거 이력 데이터 그리드'
+    },
+    {
+      title: '알림메세지',
+      desc: '다양한 알림 템플릿으로 사용자에게 메세지 전송',
+      imageDesc: '카카오톡/SMS 알림 메시지 템플릿 예시'
+    },
+    {
+      title: '스마트 진단룰',
+      desc: '스마트 진단룰을 통해 더욱 세밀한 관리',
+      imageDesc: '이벤트 규칙(Rule-set) 설정 화면'
+    },
+    {
+      title: '분석',
+      desc: '알림 발생과 처리 완료까지의 데이터 제공',
+      imageDesc: '통계 분석 그래프 및 처리 효율성 지표'
+    },
+    {
+      title: '보고서',
+      desc: '운영결과에 대한 월간 보고서 제공',
+      imageDesc: '자동 생성된 월간 운영 결과 리포트'
+    }
+  ];
+
   return (
     <div className="container mx-auto px-6 space-y-28">
       
@@ -17,11 +100,10 @@ const ServiceOverview: React.FC = () => {
           </div>
         </div>
 
-        {/* 시스템 구성도 (확대 및 폰트 확장 버전) */}
+        {/* 시스템 구성도 */}
         <div className="max-w-[1400px] mx-auto">
           <div className="flex flex-col gap-0">
-            
-            {/* Top Layer: IoT Services */}
+            {/* Top Layer */}
             <div className="flex gap-6 items-stretch">
               <div className="w-56 bg-[#9BD6FF] rounded-[24px] flex items-center justify-center text-navy font-black text-2xl shadow-sm text-center px-4">
                 IoT Services
@@ -37,26 +119,21 @@ const ServiceOverview: React.FC = () => {
                 </div>
               </div>
             </div>
-
-            {/* Connector 1 */}
+            {/* Connector */}
             <div className="flex justify-center items-center h-20 ml-56">
               <div className="flex flex-col items-center">
                 <i className="fas fa-arrows-up-down text-slate-500 text-2xl"></i>
                 <span className="text-[13px] font-black text-slate-500 mt-1 uppercase tracking-tight">Platform to Service</span>
               </div>
             </div>
-
-            {/* Middle Layer: IoT Platform */}
+            {/* Middle Layer */}
             <div className="flex gap-6 items-stretch">
               <div className="w-56 bg-[#9BD6FF] rounded-[24px] flex items-center justify-center text-navy font-black text-2xl shadow-sm text-center px-4">
                 IoT Platform
               </div>
               <div className="flex-1 border-2 border-slate-400 rounded-xl p-10 bg-white flex items-center justify-around">
-                {/* Left: Mobile/Web Device */}
                 <div className="flex items-center gap-8">
-                   <div className="relative">
-                      <i className="fas fa-mobile-screen text-slate-700 text-6xl"></i>
-                   </div>
+                   <div className="relative"><i className="fas fa-mobile-screen text-slate-700 text-6xl"></i></div>
                    <div className="relative">
                       <i className="fas fa-desktop text-brand text-8xl"></i>
                       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
@@ -64,14 +141,10 @@ const ServiceOverview: React.FC = () => {
                       </div>
                    </div>
                 </div>
-
-                {/* Horizontal Connector */}
                 <div className="flex flex-col items-center px-6">
                    <i className="fas fa-arrows-left-right text-slate-500 text-2xl"></i>
                    <span className="text-[12px] font-black text-slate-500 mt-1 uppercase tracking-tighter whitespace-nowrap">Platform to Platform</span>
                 </div>
-
-                {/* Right: Server/Cloud */}
                 <div className="flex items-center gap-8">
                    <div className="flex flex-col gap-2">
                       <div className="w-14 h-2.5 bg-slate-300 rounded-full"></div>
@@ -87,8 +160,7 @@ const ServiceOverview: React.FC = () => {
                 </div>
               </div>
             </div>
-
-            {/* Connectors to Bottom */}
+            {/* Connector */}
             <div className="flex ml-56 h-20">
                <div className="flex-1 flex flex-col items-center justify-center">
                   <i className="fas fa-arrows-up-down text-slate-500 text-2xl"></i>
@@ -99,14 +171,12 @@ const ServiceOverview: React.FC = () => {
                   <span className="text-[13px] font-black text-slate-500 mt-1 uppercase tracking-tight">Platform to things</span>
                </div>
             </div>
-
-            {/* Bottom Layer: IoT Sensor & Things */}
+            {/* Bottom Layer */}
             <div className="flex gap-6 items-stretch">
               <div className="w-56 bg-[#9BD6FF] rounded-[24px] flex items-center justify-center text-navy font-black text-2xl shadow-sm text-center px-4 leading-tight">
                 IoT Sensor<br/>& Things
               </div>
               <div className="flex-1 flex gap-6">
-                {/* Bottom Left Box */}
                 <div className="flex-[1.2] border-2 border-slate-400 rounded-xl p-8 bg-white flex items-center gap-8 shadow-sm">
                    <div className="w-32 h-32 flex-shrink-0 flex items-center justify-center bg-slate-50 rounded-2xl border border-slate-100">
                       <i className="fas fa-microchip text-slate-300 text-7xl"></i>
@@ -118,7 +188,6 @@ const ServiceOverview: React.FC = () => {
                       <span className="text-slate-800 font-black text-2xl mt-1 block">60여종</span>
                    </div>
                 </div>
-                {/* Bottom Right Box */}
                 <div className="flex-1 border-2 border-slate-400 rounded-xl p-8 bg-white flex justify-around items-center gap-4 shadow-sm">
                    {['IoT things', 'Controller', 'HVAC', 'Legacy'].map(item => (
                      <div key={item} className="w-24 h-24 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-[13px] font-black text-slate-500 text-center leading-tight p-2 hover:bg-slate-200 transition-colors">
@@ -128,39 +197,25 @@ const ServiceOverview: React.FC = () => {
                 </div>
               </div>
             </div>
-
           </div>
         </div>
       </section>
 
-      {/* [통합 프레임 1]: 현장 고민 요소 & 해결 가능성 & 운영인력 전담 어려움 내용 등 */}
+      {/* [통합 프레임 1]: 현장 고민 요소 */}
       <section className="bg-bgGray rounded-[60px] p-12 md:p-20 border border-slate-200 shadow-inner overflow-hidden">
-        {/* 건물관리 효율화를 위해 현장에서의 고민 요소는 무엇일까요? */}
         <div className="text-center mb-16">
           <h3 className="text-3xl md:text-5xl font-black text-navy mb-8">건물관리 효율화를 위해 현장에서의 고민 요소는 무엇일까요?</h3>
           <p className="text-slate-600 text-lg md:text-xl font-bold leading-relaxed max-w-4xl mx-auto">
             건물 관리 환경이 복잡해짐에 따라 현장에서는 기술적, 제도적 한계로 인한 <span className="text-brand underline decoration-2 underline-offset-8">실질적인 고민</span>이 깊어지고 있습니다.
           </p>
         </div>
-
-        {/* 고민 요소 3가지 이미지 카드 (이미지 삭제 및 공간 유지) */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-7xl mx-auto items-stretch mb-24">
           {[
-            { 
-              title: '1. 업무량 및 규제 증가', 
-              desc: '관리해야할 인프라와 자산의 규모가 지속적으로 확대되면서 법률적 규제, 중대재해, 안전에 대한 요구가 더욱 강화되고 있습니다.'
-            },
-            { 
-              title: '2. 기존 시스템의 한계', 
-              desc: '기존 시스템 및 레거시 인프라는 복잡한 자산관리 요구를 충분히 충족시키지 못하고 있습니다.'
-            },
-            { 
-              title: '3. 효과적인 관리 방안 부재', 
-              desc: '많은 건물이 FM(시설관리) 데이터의 디지털화와 자산관리의 기술적 업그레이드에 어려움을 겪고 있습니다.'
-            }
+            { title: '1. 업무량 및 규제 증가', desc: '관리해야할 인프라와 자산의 규모가 지속적으로 확대되면서 법률적 규제, 중대재해, 안전에 대한 요구가 더욱 강화되고 있습니다.' },
+            { title: '2. 기존 시스템의 한계', desc: '기존 시스템 및 레거시 인프라는 복잡한 자산관리 요구를 충분히 충족시키지 못하고 있습니다.' },
+            { title: '3. 효과적인 관리 방안 부재', desc: '많은 건물이 FM(시설관리) 데이터의 디지털화와 자산관리의 기술적 업그레이드에 어려움을 겪고 있습니다.' }
           ].map((item, i) => (
             <div key={i} className="flex flex-col bg-white rounded-[40px] border border-slate-100 shadow-xl overflow-hidden hover:-translate-y-2 transition-all duration-300">
-              {/* 이미지 삭제하고 공간만 유지 */}
               <div className="h-48 bg-slate-50 flex items-center justify-center border-b border-slate-50">
                 <i className="fas fa-image text-slate-200 text-5xl"></i>
               </div>
@@ -171,32 +226,16 @@ const ServiceOverview: React.FC = () => {
             </div>
           ))}
         </div>
-
-        {/* 안내 문구 형식 및 텍스트 수정 */}
         <div className="flex flex-col items-center mb-16 pt-20 border-t border-slate-200 text-center">
            <p className="text-slate-600 text-lg md:text-xl font-bold leading-relaxed max-w-4xl mx-auto">
              실시간 장애인지, 조치, 복구가 가능한 <span className="text-brand">통합운영 환경</span> 뿐만 아니라 실질적인 개선방향과 <span className="text-brand">현실적 대안</span>이 필요합니다.
            </p>
         </div>
-
-        {/* 운영인력 전담 어려움 등 필요 대안 카드 */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-6xl mx-auto items-start relative z-10">
           {[
-            { 
-              pain: { title: '운영인력 전담 어려움', desc: '상시 모니터링 및 대기는 현실적으로 불가' },
-              need: { title: '원격제어 및 통합관제 도입', desc: '시스템 기반  중단 없는 감시' },
-              icon: 'fa-headset'
-            },
-            { 
-              pain: { title: '조치 및 히스토리 부족', desc: '지연된 업무 처리 및 운영 데이터 관리 부재' },
-              need: { title: '공간·설비 관리의 중요성 인식', desc: '데이터 중심의 체적 이력 관리 시스템' },
-              icon: 'fa-database'
-            },
-            { 
-              pain: { title: '계속된 추가비용 발생', desc: '인건비 및 유지보수 비용의 지속적 증가' },
-              need: { title: '별도의 운영 인력 불필요', desc: '자동화 플랫폼을 통한 비용 효율 극대화' },
-              icon: 'fa-chart-pie'
-            }
+            { pain: { title: '운영인력 전담 어려움', desc: '상시 모니터링 및 대기는 현실적으로 불가' }, need: { title: '원격제어 및 통합관제 도입', desc: '시스템 기반  중단 없는 감시' }, icon: 'fa-headset' },
+            { pain: { title: '조치 및 히스토리 부족', desc: '지연된 업무 처리 및 운영 데이터 관리 부재' }, need: { title: '공간·설비 관리의 중요성 인식', desc: '데이터 중심의 체적 이력 관리 시스템' }, icon: 'fa-database' },
+            { pain: { title: '계속된 추가비용 발생', desc: '인건비 및 유지보수 비용의 지속적 증가' }, need: { title: '별도의 운영 인력 불필요', desc: '자동화 플랫폼을 통한 비용 효율 극대화' }, icon: 'fa-chart-pie' }
           ].map((item, i) => (
             <div key={i} className="flex flex-col items-center group">
               <div className="w-full bg-white p-8 rounded-3xl border border-slate-100 shadow-sm mb-8 relative overflow-hidden h-36 flex flex-col justify-center opacity-70">
@@ -204,14 +243,12 @@ const ServiceOverview: React.FC = () => {
                 <h4 className="text-lg font-black text-slate-500 mb-2">{item.pain.title}</h4>
                 <p className="text-slate-400 text-xs font-bold leading-relaxed">“{item.pain.desc}”</p>
               </div>
-              
               <div className="mb-8 flex flex-col items-center gap-1.5 h-20">
                  <div className="w-2 h-2 rounded-full bg-brand/20 animate-pulse"></div>
                  <div className="w-2 h-2 rounded-full bg-brand/40 animate-pulse delay-75"></div>
                  <div className="w-2 h-2 rounded-full bg-brand/60 animate-pulse delay-150"></div>
                  <div className="w-1 h-8 bg-gradient-to-b from-brand/60 to-brand rounded-full"></div>
               </div>
-
               <div className="w-full bg-white p-8 rounded-3xl border-2 border-brand/10 shadow-xl relative overflow-hidden group-hover:border-brand transition-all h-48 flex flex-col justify-center">
                 <div className="absolute top-0 left-0 w-1.5 h-full bg-brand"></div>
                 <div className="w-10 h-10 bg-brand/5 rounded-xl flex items-center justify-center text-brand mb-4 group-hover:bg-brand group-hover:text-white transition-all">
@@ -228,22 +265,17 @@ const ServiceOverview: React.FC = () => {
       {/* [통합 프레임 2]: 현실적 해결책 & 최적의 도구적 가치 */}
       <section className="bg-white border-2 border-slate-100 rounded-[80px] p-12 md:p-20 shadow-xl overflow-hidden">
         <div className="max-w-7xl mx-auto">
-          
-          {/* 메인 타이틀 */}
           <div className="text-center mb-16">
              <h2 className="text-4xl md:text-6xl font-black text-navy leading-tight">
                K-IoT Plus는 <span className="text-brand">현실적이고 구체적인 해결책</span>을 제공해 줍니다.
              </h2>
           </div>
-
-          {/* K-IoT Plus 최적의 도구적 가치 (위치 변경) */}
           <div className="text-center mb-12 pt-16 border-t border-slate-100">
             <h3 className="text-2xl md:text-4xl font-black text-navy leading-tight">
               K-IoT Plus는 문제해결을 위한<br />
               <span className="text-brand">최적의 도구적 가치를 제공합니다.</span>
             </h3>
           </div>
-
           <div className="max-w-6xl mx-auto mb-24">
              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {[
@@ -264,15 +296,12 @@ const ServiceOverview: React.FC = () => {
                 ))}
              </div>
           </div>
-
-          {/* 5대 기능 그리드 (위치 변경) */}
           <div className="text-center mb-12 pt-20 border-t border-slate-100">
              <h3 className="text-2xl md:text-4xl font-black text-navy leading-tight">
                <span className="text-brand">KIoT plus 는</span> IoT센서에 공간과 빌딩 설비를 연계하여<br />
                사고 예방, 피해 최소화 및 효율적인 건물 관리 제공합니다.
              </h3>
           </div>
-          
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8">
             {[
               { title: '관제 운영 사전 컨설팅', desc: '공간 및 설비 분석 기반 IoT 도입 컨설팅', icon: 'fa-magnifying-glass-chart', color: 'bg-brand' },
@@ -290,7 +319,60 @@ const ServiceOverview: React.FC = () => {
               </div>
             ))}
           </div>
+        </div>
+      </section>
 
+      {/* [추가 섹션]: 주요 서비스 및 기능 */}
+      <section className="bg-bgGray/50 rounded-[60px] p-12 md:p-20 border border-slate-100 overflow-hidden">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex justify-between items-end mb-16 px-4">
+             <div className="flex items-center gap-6">
+                <h3 className="text-4xl md:text-5xl font-black text-navy">주요 서비스 및 기능</h3>
+             </div>
+             <div className="flex gap-4 mb-4">
+                {serviceFunctions.map((_, i) => (
+                  <button key={i} onClick={() => { setActiveFuncSlide(i); setIsAutoPlayStopped(true); }} className={`w-10 h-2 rounded-full transition-all duration-500 ${activeFuncSlide === i ? 'bg-brand w-20' : 'bg-slate-300'}`} />
+                ))}
+             </div>
+          </div>
+
+          <div 
+            className="relative overflow-visible cursor-grab active:cursor-grabbing select-none"
+            onMouseDown={handleDragStart}
+            onMouseUp={handleDragEnd}
+            onMouseLeave={handleDragEnd}
+            onTouchStart={handleDragStart}
+            onTouchEnd={handleDragEnd}
+            onClick={() => setIsAutoPlayStopped(true)}
+          >
+            <div className="flex transition-transform duration-1000 ease-in-out" style={{ transform: `translateX(-${activeFuncSlide * 100}%)` }}>
+              {serviceFunctions.map((func, idx) => (
+                <div key={idx} className="min-w-full px-4">
+                  <div className="bg-white rounded-[60px] p-10 md:p-16 border border-slate-100 shadow-2xl flex flex-col lg:flex-row gap-12 min-h-[600px] items-stretch">
+                    {/* 정보 영역 */}
+                    <div className="lg:w-1/3 flex flex-col justify-center">
+                      <div className="flex items-center gap-4 mb-6">
+                        <span className="text-brand font-black text-5xl opacity-10">0{idx + 1}</span>
+                        <h4 className="text-3xl font-black text-navy leading-tight">{func.title}</h4>
+                      </div>
+                      <p className="text-slate-600 text-lg font-bold leading-relaxed border-l-4 border-brand pl-6">
+                        {func.desc}
+                      </p>
+                    </div>
+                    {/* 이미지 영역 */}
+                    <div className="lg:w-2/3 min-h-[300px] bg-slate-50 rounded-[40px] border border-slate-200 flex items-center justify-center relative overflow-hidden group pointer-events-none shadow-inner">
+                       <div className="flex flex-col items-center">
+                         <i className="fas fa-desktop text-slate-200 text-7xl mb-4"></i>
+                         <span className="text-slate-400 font-black text-xs tracking-widest uppercase mb-2">Service Function Visualization</span>
+                         <span className="text-slate-500 font-bold text-sm bg-white/80 px-4 py-2 rounded-full border border-slate-100 shadow-sm">{func.imageDesc}</span>
+                       </div>
+                       <div className="absolute inset-0 bg-brand/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
