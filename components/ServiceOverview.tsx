@@ -51,42 +51,63 @@ const ServiceOverview: React.FC = () => {
     {
       title: '종합현황',
       desc: '개별사업소 혹은 다수 사업소에 대한 시각화 된 정보 제공으로 운영현황을 직관적으로 파악하고 통합 운영 제공',
-      imageDesc: '종합 대시보드 UI (차트, 맵, 알림 현황 포함)'
+      details: [
+        { label: '데이터 시각화', items: ['사업소별 핵심 지표 및 운영 현황 차트 제공', '개별/통합 관리 모드 지원'] },
+        { label: '직관적 모니터링', items: ['실시간 이벤트 가시화 및 맵 연동', '운영 현황의 즉각적인 파악'] }
+      ]
     },
     {
       title: '이력조회',
       desc: '설정 및 진단룰에 의해 발생한 실시간 알림처리 정보 제공',
-      imageDesc: '이력 목록 및 필터링 UI'
+      details: [
+        { label: '실시간 알림 추적', items: ['발생한 모든 알림의 상세 이력 관리', '진단룰 기반 알림 필터링 및 검색'] },
+        { label: '조치 결과 관리', items: ['알림 처리 과정 및 최종 결과 아카이빙', '운영 이력의 체계적 데이터화'] }
+      ]
     },
     {
       title: '타임라인 및 히스토리',
       desc: '알림 처리에 대한 타임라인 기록과 과거 히스토리 조회',
-      imageDesc: '타임라인 및 과거 이력 데이터 그리드'
+      details: [
+        { label: '타임라인 기록', items: ['알림 발생부터 완료까지의 모든 시점 기록', '업무 처리 과정의 시각적 타임라인 제공'] },
+        { label: '과거 히스토리 분석', items: ['유사 사례 조회를 위한 과거 히스토리 연동', '지속적인 설비 상태 변화 추적'] }
+      ]
     },
     {
       title: '알림메세지',
       desc: '다양한 알림 템플릿으로 사용자에게 메세지 전송',
-      imageDesc: '카카오톡/SMS 알림 메시지 템플릿 예시'
+      details: [
+        { label: '맞춤형 알림 템플릿', items: ['사고 유형별 최적화된 알림 양식 제공', '가독성 높은 정보 전달 체계'] },
+        { label: '멀티 채널 전송', items: ['카카오 알림톡, SMS 등 다각도 전파', '담당자별 즉각적인 상황 인지 지원'] }
+      ]
     },
     {
       title: '스마트 진단룰',
       desc: '스마트 진단룰을 통해 더욱 세밀한 관리',
-      imageDesc: '이벤트 규칙(Rule-set) 설정 화면'
+      details: [
+        { label: '정밀 진단 알고리즘', items: ['단순 임계치를 넘어선 스마트 진단 기능', '데이터 패턴 기반의 이상 징후 포착'] },
+        { label: '세밀한 관리 체계', items: ['현장 특성을 반영한 진단룰 최적화', '사고 예방을 위한 선제적 진단 로직'] }
+      ]
     },
     {
       title: '분석',
       desc: '알림 발생과 처리 완료까지의 데이터 제공',
-      imageDesc: '통계 분석 그래프 및 처리 효율성 지표'
+      details: [
+        { label: '처리 효율 분석', items: ['알림 발생-응답-완료 전 과정 데이터화', '구간별 처리 시간 분석 및 개선점 도출'] },
+        { label: '운영 성과 측정', items: ['데이터 기반의 정량적 운영 평가지표 제공', '관리 효율성 향상을 위한 분석 인사이트'] }
+      ]
     },
     {
       title: '보고서',
       desc: '운영결과에 대한 월간 보고서 제공',
-      imageDesc: '자동 생성된 월간 운영 결과 리포트'
+      details: [
+        { label: '자동 보고서 생성', items: ['운영 데이터를 활용한 월간 보고서 자동화', '핵심 지표 중심의 시각적 보고 양식'] },
+        { label: '운영 의사결정 지원', items: ['데이터 기반의 투명한 운영 결과 보고', '미래 운영 전략 수립을 위한 기초 자료'] }
+      ]
     }
   ];
 
   return (
-    <div className="container mx-auto px-6 space-y-28">
+    <div className="container mx-auto px-6 space-y-28 overflow-hidden">
       
       {/* 0. 플랫폼 개요 */}
       <section id="architecture">
@@ -322,56 +343,72 @@ const ServiceOverview: React.FC = () => {
         </div>
       </section>
 
-      {/* [추가 섹션]: 주요 서비스 및 기능 */}
-      <section className="bg-bgGray/50 rounded-[60px] p-12 md:p-20 border border-slate-100 overflow-hidden">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex justify-between items-end mb-16 px-4">
-             <div className="flex items-center gap-6">
-                <h3 className="text-4xl md:text-5xl font-black text-navy">주요 서비스 및 기능</h3>
-             </div>
-             <div className="flex gap-4 mb-4">
-                {serviceFunctions.map((_, i) => (
-                  <button key={i} onClick={() => { setActiveFuncSlide(i); setIsAutoPlayStopped(true); }} className={`w-10 h-2 rounded-full transition-all duration-500 ${activeFuncSlide === i ? 'bg-brand w-20' : 'bg-slate-300'}`} />
-                ))}
-             </div>
-          </div>
+      {/* [추가 섹션]: 주요 서비스 및 기능 (특장점과 동일한 스타일 적용) */}
+      <section className="relative">
+        <div className="flex justify-between items-end mb-16 px-2">
+           <div className="flex items-center gap-6">
+              <h3 className="text-5xl font-black text-navy">주요 서비스 및 기능</h3>
+           </div>
+           <div className="flex gap-4 mb-4">
+              {serviceFunctions.map((_, i) => (
+                <button key={i} onClick={() => { setActiveFuncSlide(i); setIsAutoPlayStopped(true); }} className={`w-12 h-2 rounded-full transition-all duration-500 ${activeFuncSlide === i ? 'bg-brand w-24' : 'bg-slate-300'}`} />
+              ))}
+           </div>
+        </div>
 
-          <div 
-            className="relative overflow-visible cursor-grab active:cursor-grabbing select-none"
-            onMouseDown={handleDragStart}
-            onMouseUp={handleDragEnd}
-            onMouseLeave={handleDragEnd}
-            onTouchStart={handleDragStart}
-            onTouchEnd={handleDragEnd}
-            onClick={() => setIsAutoPlayStopped(true)}
-          >
-            <div className="flex transition-transform duration-1000 ease-in-out" style={{ transform: `translateX(-${activeFuncSlide * 100}%)` }}>
-              {serviceFunctions.map((func, idx) => (
-                <div key={idx} className="min-w-full px-4">
-                  <div className="bg-white rounded-[60px] p-10 md:p-16 border border-slate-100 shadow-2xl flex flex-col lg:flex-row gap-12 min-h-[600px] items-stretch">
-                    {/* 정보 영역 */}
-                    <div className="lg:w-1/3 flex flex-col justify-center">
-                      <div className="flex items-center gap-4 mb-6">
-                        <span className="text-brand font-black text-5xl opacity-10">0{idx + 1}</span>
-                        <h4 className="text-3xl font-black text-navy leading-tight">{func.title}</h4>
-                      </div>
-                      <p className="text-slate-600 text-lg font-bold leading-relaxed border-l-4 border-brand pl-6">
-                        {func.desc}
-                      </p>
+        <div 
+          className="relative overflow-hidden cursor-grab active:cursor-grabbing select-none rounded-[80px]"
+          onMouseDown={handleDragStart}
+          onMouseUp={handleDragEnd}
+          onMouseLeave={handleDragEnd}
+          onTouchStart={handleDragStart}
+          onTouchEnd={handleDragEnd}
+          onClick={() => setIsAutoPlayStopped(true)}
+        >
+          <div className="flex transition-transform duration-1000 ease-in-out" style={{ transform: `translateX(-${activeFuncSlide * 100}%)` }}>
+            {serviceFunctions.map((func, idx) => (
+              <div key={idx} className="min-w-full">
+                <div className="bg-white p-12 md:p-20 border border-slate-100 shadow-xl flex flex-col min-h-[750px] items-stretch mx-2 rounded-[80px]">
+                  {/* 상단: 제목 및 설명 */}
+                  <div className="mb-16">
+                    <div className="flex items-center gap-6 mb-4">
+                      <span className="text-brand font-black text-6xl opacity-10 italic"># 0{idx + 1}</span>
+                      <h4 className="text-4xl font-black text-navy leading-tight">{func.title}</h4>
                     </div>
-                    {/* 이미지 영역 */}
-                    <div className="lg:w-2/3 min-h-[300px] bg-slate-50 rounded-[40px] border border-slate-200 flex items-center justify-center relative overflow-hidden group pointer-events-none shadow-inner">
+                    <p className="text-slate-500 text-xl font-bold leading-relaxed max-w-4xl">{func.desc}</p>
+                  </div>
+                  
+                  {/* 하단: 이미지(좌) 및 상세설명(우) */}
+                  <div className="flex flex-col lg:flex-row gap-16 flex-1 items-stretch">
+                    {/* 이미지 플레이스홀더 영역 (좌) */}
+                    <div className="lg:w-1/2 min-h-[350px] bg-slate-50 rounded-[50px] border border-slate-100 flex items-center justify-center relative overflow-hidden group pointer-events-none">
                        <div className="flex flex-col items-center">
-                         <i className="fas fa-desktop text-slate-200 text-7xl mb-4"></i>
-                         <span className="text-slate-400 font-black text-xs tracking-widest uppercase mb-2">Service Function Visualization</span>
-                         <span className="text-slate-500 font-bold text-sm bg-white/80 px-4 py-2 rounded-full border border-slate-100 shadow-sm">{func.imageDesc}</span>
+                         <i className="fas fa-image text-slate-200 text-8xl mb-6"></i>
+                         <span className="text-slate-300 font-black text-sm tracking-[0.2em] uppercase">Visual Representation Area</span>
                        </div>
                        <div className="absolute inset-0 bg-brand/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                     </div>
+
+                    {/* 상세 설명 리스트 (우) */}
+                    <div className="lg:w-1/2 flex flex-col justify-center space-y-12">
+                      {func.details.map((sec, i) => (
+                        <div key={i} className="pl-12 border-l-4 border-brand">
+                          <h5 className="text-2xl font-black text-navy mb-5">{sec.label}</h5>
+                          <ul className="space-y-4">
+                            {sec.items.map((item, j) => (
+                              <li key={j} className="flex items-start gap-4 text-lg font-bold text-slate-700 leading-snug">
+                                <i className="fas fa-circle-check text-brand mt-1.5 text-base"></i>
+                                {item}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>

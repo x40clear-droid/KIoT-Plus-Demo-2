@@ -70,7 +70,7 @@ const ServiceFeatures: React.FC = () => {
   ];
 
   return (
-    <div className="w-full bg-bgGray">
+    <div className="w-full bg-bgGray overflow-hidden">
       <div className="container mx-auto px-6 py-20">
         
         <section className="mb-32">
@@ -101,7 +101,7 @@ const ServiceFeatures: React.FC = () => {
         </section>
 
         <section className="relative">
-          <div className="flex justify-between items-end mb-12 px-4">
+          <div className="flex justify-between items-end mb-12 px-2">
              <div className="flex items-center gap-6">
                 <h3 className="text-5xl font-black text-navy">특장점</h3>
              </div>
@@ -113,7 +113,7 @@ const ServiceFeatures: React.FC = () => {
           </div>
 
           <div 
-            className="relative overflow-hidden cursor-grab active:cursor-grabbing select-none"
+            className="relative overflow-hidden cursor-grab active:cursor-grabbing select-none rounded-[80px]"
             onMouseDown={handleDragStart}
             onMouseUp={handleDragEnd}
             onMouseLeave={handleDragEnd}
@@ -122,26 +122,148 @@ const ServiceFeatures: React.FC = () => {
             onClick={toggleAutoPlay}
           >
             <div className="flex transition-transform duration-1000 ease-in-out" style={{ transform: `translateX(-${activeSlide * 100}%)` }}>
-              <FeatureSlide index="01" title="Analytics 기반 지능형 운영관리" subtitle="수집된 센서 데이터의 임계치 진단뿐만 아니라, 상황별 최적의 업무 처리 가이드를 실시간으로 제공합니다." details={[
-                  { label: '센서 및 상황별 Rule-set 설정', items: ['설비/공간 특성을 반영한 지능형 데이터 분석 엔진 탑재', '위험 징후 조기 감시 및 이상 패턴 자동 검출 알고리즘 적용'] },
-                  { label: '스마트 진단 및 예지 보전', items: ['기상청/공공데이터 연동을 통한 동파·침수 선제적 예보', '실내 쾌적도(PMV) 및 공기질(IAQ) 지수 기반 지능형 제어 가이드'] }
-              ]} />
-              <FeatureSlide index="02" title="운영 효율화를 위한 통합 지표/Metric" subtitle="단순 모니터링을 넘어 관리 효율성을 입증하는 체계적인 운영 데이터 분석 Metric을 제공합니다." details={[
-                  { label: '실시간 관제 운영 대시보드', items: ['알림 발생 후 초동 조치 완료까지의 구간별 처리율 지표 관리', '전체 사업소 통합 관리 및 지점별 운영 효율성 비교 분석'] },
-                  { label: '데이터 기반 정밀 분석 보고서', items: ['센서·공간·장비별 빈발 장애 입체 분석 데이터 제공', '운영 성과 측정 및 월간 운영 개선 보고서 자동 생성'] }
-              ]} />
-              <FeatureSlide index="03" title="TCO 절감을 위한 클라우드 SaaS 솔루션" subtitle="복잡한 서버 구축 없이 월 구독 방식의 SaaS를 통해 초기 투자비용(CAPEX)을 혁신적으로 절감합니다." details={[
-                  { label: '구축형 대비 압도적 경제성', items: ['H/W 도입비 및 고비용 시스템 개발 인건비 ZERO화', '클라우드 인프라 활용으로 도입 기간 획기적 단축 (3일 이내)'] },
-                  { label: '운영 편의성 및 전문성', items: ['보안/업그레이드/백업 등 인프라 관리를 본사에서 전담', 'SaaS 표준 로직 적용으로 운영 시스템의 안정성 상향 평준화'] }
-              ]} />
-              <FeatureSlide index="04" title="지속적인 지능형 서비스 고도화" subtitle="변화하는 법령과 기술 트렌드에 맞춰 지능형 로직을 상시 업데이트하여 최고의 서비스 품질을 유지합니다." details={[
-                  { label: '최신 법규 및 기술 규제 대응', items: ['중대재해처벌법, 소방안전 관리 등 변경 법령 실시간 반영', '스마트 진단 로직 및 AI 분석 알고리즘 상시 업그레이드'] },
-                  { label: '안정적인 24/7 서비스 유지', items: ['클라우드 기반의 무중단 서비스 아키텍처 구현', '최신 보안 패치 및 취약점 상시 점체로 데이터 보안 강화'] }
-              ]} />
-              <FeatureSlide index="05" title="확장성이 뛰어난 유연한 시스템 구성" subtitle="LoRa, LTE-M 등 다양한 통신 규격과 표준 API 연동을 통해 현장 맞춤형 인프라를 구축합니다." details={[
-                  { label: '다양한 유무선 네트워크 지원', items: ['LoRa-WAN, LTE-M, Wi-Fi 등 현장 여건별 통신 최적화', '기존 레거시 설비 및 외부 솔루션 연동을 위한 표준 API 지원'] },
-                  { label: '사용자 중심의 UI/UX 커스터마이징', items: ['사업소별 관리 특성에 맞춘 사용자 정의 알림 설정', '모바일·PC·대형 상황판 등 다양한 디바이스 최적화 뷰 제공'] }
-              ]} />
+              <FeatureSlide 
+                index="01" 
+                title="Analytics 기반운영관리" 
+                subtitle="센서데이터의진단룰뿐만아니라알림업무처리까지진단하여조치가이드를제공합니다." 
+                details={[
+                  { 
+                    label: '센서설정 Rule-set', 
+                    items: [
+                      '설비와 공간 매칭 특성별 Rule-set 설정',
+                      '위험상황 감지 및 이상 패턴 검출',
+                      '계절별, 요일별, 시간대별 지능형 운영'
+                    ] 
+                  },
+                  { 
+                    label: '스마트진단 Rule-set', 
+                    items: [
+                      '알림 횟수/간격 판단 및 자동 조정',
+                      '기상 연계 예지 보전 (동파, 누수 등)',
+                      '에너지, 쾌적도, 공기질 진단지수 관리'
+                    ] 
+                  },
+                  { 
+                    label: '업무처리 Rule-set', 
+                    items: [
+                      '기준/평균 응답 및 처리시간 정밀 관리',
+                      '알림 메시지 중복 발생에 대한 혼란 방지'
+                    ] 
+                  }
+                ]} 
+              />
+              <FeatureSlide 
+                index="02" 
+                title="운영지표및각종Metric제공" 
+                subtitle="각종지표와Metric은업무의대응력을높이고, 운영의의사결정을지원합니다." 
+                details={[
+                  { 
+                    label: '관제운영지표', 
+                    items: [
+                      '발생~완료 처리율 지표 및 비율 관리',
+                      'IoT 운영평가 및 설비 가용성 지표',
+                      '전체/개별 사업소 운영 현황 비교 분석'
+                    ] 
+                  },
+                  { 
+                    label: 'Metric 의사결정 지원', 
+                    items: [
+                      '유형별 평균 응답 및 처리시간 데이터',
+                      '알림처리 타임라인 및 상세 히스토리',
+                      '경년 변화에 따른 사고율/빈도율 분석'
+                    ] 
+                  },
+                  { 
+                    label: '분석 및 보고서', 
+                    items: [
+                      '센서/공간/장비별 알림 발생 원인 분석',
+                      '알림 추이 분석 및 자동 월간보고서 제공'
+                    ] 
+                  }
+                ]} 
+              />
+              <FeatureSlide 
+                index="03" 
+                title="IT 투자비용절감" 
+                subtitle="복잡한 서버 구축 없이 월 구독방식을 통해 비용 부담을 제거 하였습니다." 
+                details={[
+                  { 
+                    label: '구축형 대비 경쟁력 확보', 
+                    items: [
+                      'H/W 도입비 및 고비용 개발 인건비 Zero화',
+                      '전문가 사전 컨설팅으로 도입 비용 최소화',
+                      '고가 인프라 구축 없는 신속한 도입 가능'
+                    ] 
+                  },
+                  { 
+                    label: '서비스형 솔루션 제공', 
+                    items: [
+                      '초기 구축/유지비 없는 투명한 구독 모델',
+                      '장기 계약 시 합리적 비용 및 혜택 제시',
+                      '지속적 업데이트 포함 경제적 가치 극대화'
+                    ] 
+                  }
+                ]} 
+              />
+              <FeatureSlide 
+                index="04" 
+                title="지속적인 서비스 개선" 
+                subtitle="비즈니스 환경변화가 있더라도 지속적인 업그레이드와 안정적인 서비스를 제공합니다." 
+                details={[
+                  { 
+                    label: '지속적인 업그레이드', 
+                    items: [
+                      '법령 및 기준 변화에 따른 실시간 설정',
+                      '스마트 진단 및 Rule-Set 상시고도화',
+                      '관제 기능 및 알림 템플릿 지속 업데이트'
+                    ] 
+                  },
+                  { 
+                    label: '기술지원 서비스', 
+                    items: [
+                      'Rule-set 변경 및 장소 변경 지원 서비스',
+                      '알람 환경 변화에 따른 전문 기술 지원'
+                    ] 
+                  },
+                  { 
+                    label: '유연성 및 확장성', 
+                    items: [
+                      '표준프로토콜 지원 및 연계 확장성 확보',
+                      '글로벌 IoT 표준(MQTT) 완벽 대응'
+                    ] 
+                  }
+                ]} 
+              />
+              <FeatureSlide 
+                index="05" 
+                title="사업소특성에맞는 유연한구성" 
+                subtitle="다양한연결성을바탕으로사업소특성과사용자운영에유연하게대응합니다." 
+                details={[
+                  { 
+                    label: '표준 및 설비 연결성 확보', 
+                    items: [
+                      'IoT API : Web Socket, Hook, MQTT',
+                      '표준: Modbus, OPC, BACnet 연동',
+                      '외부 플랫폼 연동을 위한 API 제공'
+                    ] 
+                  },
+                  { 
+                    label: '기존 Legacy 시스템 연계', 
+                    items: [
+                      '기존 시스템 정보 통합 및 알림/업무 적용',
+                      '응답/처리시간 및 운영평가 지표 통합관리',
+                      '사업소별 운영 평가 비교 지표 제공'
+                    ] 
+                  },
+                  { 
+                    label: '그룹사 보안 정책 적용', 
+                    items: [
+                      '개인정보보호 시행령 및 법령 완벽 준수',
+                      '정기 웹 취약성 평가 및 보안 기준 준수'
+                    ] 
+                  }
+                ]} 
+              />
             </div>
           </div>
         </section>
@@ -151,37 +273,37 @@ const ServiceFeatures: React.FC = () => {
 };
 
 const FeatureSlide: React.FC<{ index: string; title: string; subtitle: string; details: { label: string; items: string[] }[] }> = ({ index, title, subtitle, details }) => (
-  <div className="min-w-full px-4">
-    <div className="bg-white rounded-[80px] p-12 md:p-20 border border-slate-100 shadow-xl flex flex-col min-h-[750px] items-stretch">
+  <div className="min-w-full">
+    <div className="bg-white p-12 md:p-16 border border-slate-100 shadow-xl flex flex-col min-h-[720px] items-stretch mx-2 rounded-[80px]">
       {/* 상단: 제목 및 설명 */}
-      <div className="mb-16">
-        <div className="flex items-center gap-6 mb-4">
-          <span className="text-brand font-black text-6xl opacity-10 italic"># {index}</span>
-          <h4 className="text-4xl font-black text-navy leading-tight">{title}</h4>
+      <div className="mb-12">
+        <div className="flex items-center gap-8 mb-6">
+          <span className="text-brand font-black text-7xl opacity-10 italic"># {index}</span>
+          <h4 className="text-5xl font-black text-navy leading-tight">{title}</h4>
         </div>
-        <p className="text-slate-500 text-xl font-bold leading-relaxed max-w-4xl">{subtitle}</p>
+        <p className="text-slate-600 text-2xl font-bold leading-relaxed max-w-5xl">{subtitle}</p>
       </div>
       
       {/* 하단: 이미지(좌) 및 상세설명(우) */}
       <div className="flex flex-col lg:flex-row gap-16 flex-1 items-stretch">
-        {/* 이미지 플레이스홀더 영역 (좌) */}
-        <div className="lg:w-1/2 min-h-[350px] bg-slate-50 rounded-[50px] border border-slate-100 flex items-center justify-center relative overflow-hidden group pointer-events-none">
+        {/* 이미지 플레이스홀더 영역 (좌) - 비중 확대 (1/2) */}
+        <div className="lg:w-1/2 min-h-[400px] bg-slate-50 rounded-[50px] border border-slate-100 flex items-center justify-center relative overflow-hidden group pointer-events-none">
            <div className="flex flex-col items-center">
-             <i className="fas fa-image text-slate-200 text-8xl mb-6"></i>
-             <span className="text-slate-300 font-black text-sm tracking-[0.2em] uppercase">Visual Representation Area</span>
+             <i className="fas fa-image text-slate-200 text-[120px] mb-8"></i>
+             <span className="text-slate-300 font-black text-base tracking-[0.3em] uppercase">Visual Representation Area</span>
            </div>
            <div className="absolute inset-0 bg-brand/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
         </div>
 
-        {/* 상세 설명 리스트 (우) */}
+        {/* 상세 설명 리스트 (우) - 텍스트 사이즈 대폭 확대 */}
         <div className="lg:w-1/2 flex flex-col justify-center space-y-12">
           {details.map((sec, i) => (
-            <div key={i} className="pl-12 border-l-4 border-brand">
-              <h5 className="text-2xl font-black text-navy mb-5">{sec.label}</h5>
+            <div key={i} className="pl-10 border-l-4 border-brand">
+              <h5 className="text-2xl font-black text-navy mb-5 tracking-tight">{sec.label}</h5>
               <ul className="space-y-4">
                 {sec.items.map((item, j) => (
-                  <li key={j} className="flex items-start gap-4 text-lg font-bold text-slate-700 leading-snug">
-                    <i className="fas fa-circle-check text-brand mt-1.5 text-base"></i>
+                  <li key={j} className="flex items-start gap-4 text-xl font-bold text-slate-700 leading-snug">
+                    <i className="fas fa-circle-check text-brand mt-1.5 text-lg"></i>
                     {item}
                   </li>
                 ))}
